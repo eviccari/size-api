@@ -1,0 +1,11 @@
+server:
+  port: 8080
+  servlet:
+    contextPath: /
+
+spring:
+  datasource:
+    username: size_user_service
+    password: 123
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/products
+    driver-class-name: com.mysql.cj.jdbc.Driver
