@@ -1,7 +1,9 @@
 package br.com.company.products.size_api.stub;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import br.com.company.products.size_api.utils.ObjectUtils;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
 
 import br.com.company.products.size_api.TestBase;
@@ -11,17 +13,16 @@ import br.com.company.products.size_api.exceptions.BadRequestException;
 import br.com.company.products.size_api.exceptions.InternalServerErrorException;
 import br.com.company.products.size_api.exceptions.NotFoundException;
 import br.com.company.products.size_api.exceptions.UnprocessableEntityException;
-import br.com.company.products.size_api.utils.ObjectUtils;
 
 class TestExceptions extends TestBase{
 
     public SQLAdapter<SizeDTO> buildSQLAdapterStubInstance() {
-        return new SQLAdapter<SizeDTO>() {
+        return new SQLAdapter<>() {
 
             @Override
             public void create(String sql, SizeDTO entity) throws InternalServerErrorException {
                 throw new InternalServerErrorException(new Throwable("error"));
-                
+
             }
 
             @Override
@@ -38,13 +39,17 @@ class TestExceptions extends TestBase{
             public int delete(String sql, String id) throws InternalServerErrorException {
                 return 0;
             }
-            
+
         };
     }
 
 
     @Test
     void ShouldRiseUnprocessableEntityException() {
+        var dto10 = Instancio.of(SizeDTO.class).create();
+        System.out.println("INSTANCTION AQUI ABAIXO:::::::::");
+        System.out.println(dto10.toString());
+
         var dto = this.buildMockDTO();
         dto.setDescription(NULL_STRING);
 
@@ -62,10 +67,10 @@ class TestExceptions extends TestBase{
         assertThrows(UnprocessableEntityException.class, () -> service.create(dto3));
 
         var dto4 = this.buildMockDTO();
-        var model = ObjectUtils.convertFrom(dto4);        
+        var model = ObjectUtils.convertFrom(dto4);
         model.setId(NULL_STRING);
 
-        assertThrows(UnprocessableEntityException.class, () -> model.validate());
+        assertThrows(UnprocessableEntityException.class, model::validate);
     }
 
     @Test

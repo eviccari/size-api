@@ -1,1 +1,1 @@
-.dev/sonar.sh $(cat .dev/sonar-token.txt)
+.dev/sonar.sh "$(cat .dev/sonar-token.txt)"
